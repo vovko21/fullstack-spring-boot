@@ -1,8 +1,13 @@
 package com.example.springboot.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,26 +16,7 @@ public class Animal {
     @Column(length = 255, nullable = false)
     private String name;
 
-    public Animal() {
-    }
-
     public Animal(String name) {
-        this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 }
