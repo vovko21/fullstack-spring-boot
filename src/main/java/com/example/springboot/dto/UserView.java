@@ -1,13 +1,17 @@
 package com.example.springboot.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class UserView {
 
-    private String id;
+    public UserView () {}
+
+    private Long id;
 
     private String username;
-    private String fullName;
+    private String token;
 
 }

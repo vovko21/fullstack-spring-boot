@@ -40,14 +40,14 @@ public class User {
 
 
     public User() {
-        roles=new ArrayList<Role>();
+        roles = new ArrayList<Role>();
     }
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
         this.enabled = true;
-        roles=new ArrayList<Role>();
+        roles = new ArrayList<Role>();
     }
 
 }

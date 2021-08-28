@@ -8,6 +8,7 @@ import {
 import Home from './components/home';
 import Login from './components/login';
 import Navbar from './components/navbar';
+import Register from './components/register';
 
 class App extends Component {
 
@@ -23,6 +24,9 @@ class App extends Component {
             </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route path="/register">
+              <Register />
             </Route>
           </Switch>
         </div>

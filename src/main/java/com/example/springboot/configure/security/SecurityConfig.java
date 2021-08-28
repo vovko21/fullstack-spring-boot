@@ -86,21 +86,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/api/animals").hasAuthority(Roles.Admin)
+                // Our public endpoints
                 .antMatchers(String.format("%s/**", restApiDocPath)).permitAll()
                 .antMatchers(String.format("%s/**", swaggerPath)).permitAll()
                 .antMatchers("/api/public/**").permitAll()
-                // Our public endpoints
-//                .antMatchers("/api/public/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/author/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/author/search").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/book/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/book/search").permitAll()
                 // Our private endpoints
                 .anyRequest().authenticated();
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll();
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }

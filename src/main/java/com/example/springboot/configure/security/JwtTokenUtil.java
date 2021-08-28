@@ -33,11 +33,7 @@ public class JwtTokenUtil {
         String [] userRoles = user.getRoles().stream()
                 .map((role) -> role.getName()).toArray(String []:: new);
 
-//        Type type = new TypeToken<List<String[]>>() {}.getType();
-
         String roles = gson.toJson(userRoles);
-
-        //System.out.println(roles);
 
         return Jwts.builder()
                 .setSubject(format("%s,%s", user.getId(), user.getUsername()))

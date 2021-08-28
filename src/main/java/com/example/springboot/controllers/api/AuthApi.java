@@ -2,6 +2,7 @@ package com.example.springboot.controllers.api;
 
 import com.example.springboot.configure.security.JwtTokenUtil;
 import com.example.springboot.dto.AuthRequest;
+import com.example.springboot.dto.RegisterRequest;
 import com.example.springboot.dto.UserView;
 import com.example.springboot.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,7 @@ public class AuthApi {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("login")
     public ResponseEntity<UserView> login(@RequestBody @Valid AuthRequest request) {
@@ -42,10 +45,12 @@ public class AuthApi {
             User user = (User) authenticate.getPrincipal();
             com.example.springboot.entities.User dbUser = userRepository
                     .findByUsername(user.getUsername());
+
             UserView userView = new UserView();
             String token = jwtTokenUtil.generateAccessToken(dbUser);
             userView.setUsername(user.getUsername());
-            userView.setFullName(token);
+            userView.setToken(token);
+
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, token)
                     .body(userView);
@@ -54,5 +59,38 @@ public class AuthApi {
         }
     }
 
+    @PostMapping("register")
+    public ResponseEntity<UserView> register(@RequestBody @Valid RegisterRequest request) {
+        try {
+            if (userRepository.findByUsername(request.getUsername()) != null) {
+                throw new BadCredentialsException("There is an account with that email address: " + request.getUsername());
+            }
+
+            if (!request.getPassword().equals(request.getPasswordConfirm())) {
+                throw new BadCredentialsException("Password must be equal");
+            }
+
+            com.example.springboot.entities.User user = new com.example.springboot.entities.User(request.getUsername(),
+                    bCryptPasswordEncoder.encode(request.getPassword()));
+
+            userRepository.save(user);
+
+            Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    user.getUsername(),
+                    user.getPassword()
+            ));
+            String token = jwtTokenUtil.generateAccessToken(user);
+
+            UserView userView = new UserView();
+            userView.setUsername(user.getUsername());
+            userView.setToken(token);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION, token)
+                    .body(userView);
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 }
 
