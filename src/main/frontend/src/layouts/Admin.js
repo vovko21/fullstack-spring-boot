@@ -7,6 +7,10 @@ import AdminNavbar from "../components/Navbars/AdminNavbar";
 import AdminFooter from "../components/Footers/AdminFooter";
 import Sidebar from "../components/Sidebar/Sidebar";
 
+import "../assets/plugins/nucleo/css/nucleo.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "../assets/scss/argon-dashboard-react.scss";
+
 import routes from "../routes.js";
 
 const Admin = (props) => {
@@ -56,16 +60,16 @@ const Admin = (props) => {
         }}
       />
       <div className="main-content" ref={mainContent}>
-        {/* <AdminNavbar
+        <AdminNavbar
           {...props}
           brandText={getBrandText(props.location.pathname)}
-        /> */}
+        />
         <Switch>
           {getRoutes(routes)}
           <Redirect from="*" to="/admin/index" />
         </Switch>
         <Container fluid>
-          <AdminFooter />
+          {/* <AdminFooter /> */}
         </Container>
       </div>
     </>

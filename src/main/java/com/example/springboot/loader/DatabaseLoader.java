@@ -7,10 +7,14 @@ import com.example.springboot.entities.User;
 import com.example.springboot.repositories.AnimalRepository;
 import com.example.springboot.repositories.RoleRepository;
 import com.example.springboot.repositories.UserRepository;
+import javafx.beans.binding.ListBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class DatabaseLoader implements CommandLineRunner {
@@ -30,23 +34,28 @@ public class DatabaseLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if(this.animalRepository.count()==0)
+        if(this.animalRepository.count() == 0)
         {
             this.animalRepository.save(new Animal("Собака Джима"));
             this.animalRepository.save(new Animal("Кіт Аліси"));
             this.animalRepository.save(new Animal("Кродил Тома"));
         }
-        if(this.roleRepository.count()==0)
+        if(this.roleRepository.count() == 0)
         {
             this.roleRepository.save(new Role(Roles.Admin));
             this.roleRepository.save(new Role(Roles.User));
         }
-
-        if(this.userRepository.count()==0)
+        if(this.userRepository.count() == 0)
         {
-            this.userRepository.save(
-              new User("semen@gmail.com",passwordEncoder.encode("123456"))
-            );
+            List<Role> rolesAdmin = new ArrayList<>();
+            rolesAdmin.add(this.roleRepository.findByName(Roles.Admin));
+            this.userRepository.save(new User("semen@gmail.com",
+                    passwordEncoder.encode("123456"), rolesAdmin));
+
+            List<Role> rolesUser = new ArrayList<>();
+            rolesUser.add(this.roleRepository.findByName(Roles.User));
+            this.userRepository.save(new User("user@gmail.com",
+                    passwordEncoder.encode("123456"), rolesUser));
         }
     }
 }

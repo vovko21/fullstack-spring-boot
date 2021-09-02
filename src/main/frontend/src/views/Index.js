@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
@@ -20,6 +21,8 @@ import {
   Row,
   Col,
 } from "reactstrap";
+//Services
+import RequestService from '../services/requests'
 
 // core components
 // import {
@@ -32,6 +35,7 @@ import {
 import Header from "../components/Headers/Header";
 
 const Index = (props) => {
+  const [animalsData, setAnimalsData] = useState(null);
   const [activeNav, setActiveNav] = useState(1);
   // const [chartExample1Data, setChartExample1Data] = useState("data1");
 
@@ -39,13 +43,37 @@ const Index = (props) => {
   //   parseOptions(Chart, chartOptions());
   // }
 
+  React.useEffect(async () => {
+    const fisrtAnimalsData = await getFirstAnimals(5).then(response => { return response.data });
+    const mappedAnimals = mapAllAnimals(fisrtAnimalsData)
+    setAnimalsData(mappedAnimals);
+  }, []);
+
   const toggleNavs = (e, index) => {
     e.preventDefault();
     setActiveNav(index);
     // setChartExample1Data("data" + index);
   };
+
+  const getFirstAnimals = (count) => {
+    return RequestService.getFirstAnimals(count);
+  }
+
+  const mapAllAnimals = (data) => {
+    if (data == null) return;
+    return data.map((animal) => {
+      return (
+        <tr>
+          <th scope="row">{animal.id}</th>
+          <td>{animal.name}</td>
+        </tr>
+      )
+    });
+  }
+
   return (
     <>
+      {/* Total header content */}
       <Header />
       {/* Page content */}
       <Container className="mt--7" fluid>
@@ -127,22 +155,22 @@ const Index = (props) => {
             </Card>
           </Col>
         </Row>
+        {/* All Animals */}
         <Row className="mt-5">
           <Col className="mb-5 mb-xl-0" xl="8">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Page visits</h3>
+                    <h3 className="mb-0">Всі тварини</h3>
                   </div>
                   <div className="col text-right">
                     <Button
                       color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
+                      href="/admin/animals"
                       size="sm"
                     >
-                      See all
+                      Усі
                     </Button>
                   </div>
                 </Row>
@@ -150,56 +178,12 @@ const Index = (props) => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Page name</th>
-                    <th scope="col">Visitors</th>
-                    <th scope="col">Unique users</th>
-                    <th scope="col">Bounce rate</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Назва</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">/argon/</th>
-                    <td>4,569</td>
-                    <td>340</td>
-                    <td>
-                      <i className="fas fa-arrow-up text-success mr-3" /> 46,53%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/argon/index.html</th>
-                    <td>3,985</td>
-                    <td>319</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />{" "}
-                      46,53%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/argon/charts.html</th>
-                    <td>3,513</td>
-                    <td>294</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />{" "}
-                      36,49%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/argon/tables.html</th>
-                    <td>2,050</td>
-                    <td>147</td>
-                    <td>
-                      <i className="fas fa-arrow-up text-success mr-3" /> 50,87%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/argon/profile.html</th>
-                    <td>1,795</td>
-                    <td>190</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-danger mr-3" />{" "}
-                      46,53%
-                    </td>
-                  </tr>
+                  {animalsData}
                 </tbody>
               </Table>
             </Card>

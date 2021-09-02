@@ -9,10 +9,6 @@ import Login from './components/login';
 import Navbar from './components/Navbars/UserNavbar';
 import Register from './components/register';
 
-import "../src/assets/plugins/nucleo/css/nucleo.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-// import "./assets/scss/argon-dashboard-react.scss";
-
 import AdminLayout from './layouts/Admin';
 
 class App extends Component {
@@ -58,7 +54,7 @@ class App extends Component {
               <Register chechIsLoginIn={this.chechIsLoginIn}/>
             </div>
           </Route>
-          {/* AdminLayout */}
+          {/* Admin Layout */}
           <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
         </Switch>
       </Router>

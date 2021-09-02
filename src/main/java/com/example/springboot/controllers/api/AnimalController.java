@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/animals")
@@ -22,6 +23,14 @@ public class AnimalController {
 
     @GetMapping("/all")
     public List<Animal> index() { return (List<Animal>) animalRepository.findAll(); }
+
+    @GetMapping("/count")
+    public int count() { return ((List<Animal>)animalRepository.findAll()).size(); }
+
+    @GetMapping("/limit={count}")
+    public List<Animal> all(@PathVariable("count") int count) {
+        return ((List<Animal>)animalRepository.findAll()).stream().limit(count).collect(Collectors.toList());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Animal> getAnimalById(@PathVariable("id") int id) {

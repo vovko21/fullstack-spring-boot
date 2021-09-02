@@ -6,20 +6,45 @@ const USERS_API_URL = "http://localhost:8080/api/users/";
 const ANIMALS_API_URL = "http://localhost:8080/api/animals/";
 
 class RequestService {
-    // get requests
+    //|============|
+    //|GET requests|
+    //|============|
+    //Users
     getAllUsers() {
         return axios.get(USERS_API_URL + 'all', {
             headers: authHeader()
         });
     }
 
+    getCountAllUsers() {
+        return axios.get(USERS_API_URL + 'count', {
+            headers: authHeader()
+        });
+    }
+
+    //Animals
     getAllAnimals() {
         return axios.get(ANIMALS_API_URL + 'all', {
             headers: authHeader()
         });
     }
 
-    // post requests
+    getFirstAnimals(count) {
+        return axios.get(ANIMALS_API_URL + 'limit=' + count, {
+            headers: authHeader()
+        });
+    }
+
+    getCountAllAnimals() {
+        return axios.get(ANIMALS_API_URL + 'count', {
+            headers: authHeader()
+        });
+    }
+
+    //|============|
+    //|POST requests|
+    //|============|
+    //Auth
     postLogin(parameters, chechIsLoginIn) {
         return axios.post(PUBLIC_API_URL +  'login', parameters).then(response => {
             if(response.data.token) {

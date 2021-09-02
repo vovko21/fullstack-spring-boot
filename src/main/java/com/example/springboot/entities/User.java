@@ -27,8 +27,8 @@ public class User {
     @ManyToMany(cascade=CascadeType.MERGE)
     @JoinTable(
             name="tblUserRoles",
-            joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="id")})
+            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
     private List<Role> roles;
 
     private boolean enabled = true;
@@ -50,4 +50,10 @@ public class User {
         roles = new ArrayList<Role>();
     }
 
+    public User(String username, String password, List<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.enabled = true;
+        this.roles = roles;
+    }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import RequestService from '../../services/requests'
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 export class Home extends Component {
   state = {
@@ -15,6 +14,7 @@ export class Home extends Component {
   loadAllUsers = () => {
     RequestService.getAllUsers().then(responce => {
       if (responce != null) {
+        console.log(responce);
         this.setState({ users: responce.data });
       }
     });
@@ -23,6 +23,7 @@ export class Home extends Component {
   }
 
   mapUsers = (data) => {
+    if (data == null) return;
     return data.map((user) => {
       return (
         <tr>

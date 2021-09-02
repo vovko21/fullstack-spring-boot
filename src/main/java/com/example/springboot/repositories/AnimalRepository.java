@@ -4,5 +4,4 @@ import com.example.springboot.entities.Animal;
 import org.springframework.data.repository.CrudRepository;
 
 
-public interface AnimalRepository extends CrudRepository<Animal, Integer> {
-}
+public interface AnimalRepository extends CrudRepository<Animal, Integer> {}

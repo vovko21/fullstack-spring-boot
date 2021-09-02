@@ -75,12 +75,8 @@ public class AuthApi {
 
             userRepository.save(user);
 
-            Authentication authenticate = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.getUsername(),
-                            user.getPassword()
-                    )
-            );
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                            user.getUsername(), user.getPassword()));
 
             UserView userView = new UserView();
             String token = jwtTokenUtil.generateAccessToken(user);
