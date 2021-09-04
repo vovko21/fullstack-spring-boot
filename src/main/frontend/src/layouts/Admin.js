@@ -7,10 +7,6 @@ import AdminNavbar from "../components/Navbars/AdminNavbar";
 import AdminFooter from "../components/Footers/AdminFooter";
 import Sidebar from "../components/Sidebar/Sidebar";
 
-import "../assets/plugins/nucleo/css/nucleo.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import "../assets/scss/argon-dashboard-react.scss";
-
 import routes from "../routes.js";
 
 const Admin = (props) => {

@@ -28,4 +28,8 @@ public class Hostel {
         this.name = name;
         this.adress = adress;
     }
+
+    public void addAnimal(Animal animal) {
+        animals.add(animal);
+    }
 }

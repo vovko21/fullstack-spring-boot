@@ -76,6 +76,13 @@ class RequestService {
             }
         });
     }
+
+    //Enroll
+    postEnroll(parameters) {
+        return axios.post(PUBLIC_API_URL + 'enroll', parameters, {
+            headers: authHeader()
+        });
+    }
 }
 
 export default new RequestService();
