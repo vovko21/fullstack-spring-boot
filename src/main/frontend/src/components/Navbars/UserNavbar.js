@@ -13,6 +13,7 @@ export class Navbar extends Component {
     }
 
     render() {
+        let adminRedirect = <li className="nav-item"><Link className="nav-link" aria-current="page" to="/admin">Admin</Link></li>
         if (this.props.isLoginIn) {
             return (
                 <nav className="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Third navbar example">
@@ -27,6 +28,7 @@ export class Navbar extends Component {
                                 <li className="nav-item" >
                                     <Link className="nav-link active" aria-current="page" to="/">Головна</Link>
                                 </li>
+                                {this.props.isAdmin || adminRedirect}
                             </ul>
                             <ul className="navbar-nav ml-auto mb-2 mb-sm-0">
                                 <li className="nav-item">

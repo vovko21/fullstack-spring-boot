@@ -1,9 +1,11 @@
 package com.example.springboot.controllers.api;
 
 import com.example.springboot.configure.security.JwtTokenUtil;
+import com.example.springboot.constants.Roles;
 import com.example.springboot.dto.AuthRequest;
 import com.example.springboot.dto.RegisterRequest;
 import com.example.springboot.dto.UserView;
+import com.example.springboot.entities.Role;
 import com.example.springboot.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +52,7 @@ public class AuthApi {
             String token = jwtTokenUtil.generateAccessToken(dbUser);
             userView.setUsername(user.getUsername());
             userView.setToken(token);
+            userView.setRoles(dbUser.getRoles());
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, token)
@@ -72,7 +75,7 @@ public class AuthApi {
 
             com.example.springboot.entities.User user = new com.example.springboot.entities.User(request.getUsername(),
                     bCryptPasswordEncoder.encode(request.getPassword()));
-
+            user.addRole(new Role(Roles.User));
             userRepository.save(user);
 
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -82,6 +85,7 @@ public class AuthApi {
             String token = jwtTokenUtil.generateAccessToken(user);
             userView.setUsername(user.getUsername());
             userView.setToken(token);
+            userView.setRoles(user.getRoles());
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, token)

@@ -85,14 +85,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Swagger endpoints must be publicly accessible
                 .antMatchers("/").permitAll()
                 .antMatchers("/static/**").permitAll()
-//                .antMatchers("/api/animals/**").hasAuthority(Roles.Admin)
+                .antMatchers("/api/animals/**").hasAuthority(Roles.Admin)
                 .antMatchers("/admin/**").hasAuthority(Roles.Admin)
                 // Our public endpoints
                 .antMatchers(String.format("%s/**", restApiDocPath)).permitAll()
                 .antMatchers(String.format("%s/**", swaggerPath)).permitAll()
-                .antMatchers("/api/public/**").permitAll();
+                .antMatchers("/api/public/**").permitAll()
                 // Our private endpoints
-//                .anyRequest().authenticated();
+                .anyRequest().authenticated();
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }

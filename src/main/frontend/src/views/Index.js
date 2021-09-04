@@ -162,7 +162,7 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Всі тварини</h3>
+                    <h3 className="mb-0">Animals</h3>
                   </div>
                   <div className="col text-right">
                     <Button
@@ -170,7 +170,7 @@ const Index = (props) => {
                       href="/admin/animals"
                       size="sm"
                     >
-                      Усі
+                      See all
                     </Button>
                   </div>
                 </Row>
@@ -179,7 +179,7 @@ const Index = (props) => {
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Назва</th>
+                    <th scope="col">Name</th>
                   </tr>
                 </thead>
                 <tbody>

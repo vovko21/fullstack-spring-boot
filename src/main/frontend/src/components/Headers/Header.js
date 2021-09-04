@@ -7,11 +7,13 @@ class Header extends Component {
   state = {
     countAllUsers: 0,
     countAllAnimals: 0,
+    countAllHostels: 0,
   }
   
   async componentDidMount () {
     this.setState({ countAllUsers: await this.getCountAllUsers().then(response => { return response.data}) });
     this.setState({ countAllAnimals: await this.getCountAllAnimals().then(response => { return response.data}) });
+    this.setState({ countAllHostels: await this.getCountAllHostels().then(response => { return response.data}) });
   }
   
   getCountAllUsers = () => {
@@ -22,6 +24,9 @@ class Header extends Component {
     return RequestService.getCountAllAnimals();
   }
 
+  getCountAllHostels = () => {
+    return RequestService.getCountAllHostels();
+  }
 
   render () {
     return (
@@ -40,10 +45,10 @@ class Header extends Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Traffic
+                            TOTAL HOSTELS
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            350,897
+                            {this.state.countAllHostels}
                           </span>
                         </div>
                         <Col className="col-auto">
@@ -70,7 +75,7 @@ class Header extends Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Кількість Тварин
+                            TOTAL ANIMALS
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">{this.state.countAllAnimals}</span>
                         </div>
@@ -98,7 +103,7 @@ class Header extends Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Кількість користувачів
+                           TOTAL USERS
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">{this.state.countAllUsers}</span>
                         </div>
@@ -117,7 +122,7 @@ class Header extends Component {
                     </CardBody>
                   </Card>
                 </Col>
-                <Col lg="6" xl="3">
+                {/* <Col lg="6" xl="3">
                   <Card className="card-stats mb-4 mb-xl-0">
                     <CardBody>
                       <Row>
@@ -144,7 +149,7 @@ class Header extends Component {
                       </p>
                     </CardBody>
                   </Card>
-                </Col>
+                </Col> */}
               </Row>
             </div>
           </Container>

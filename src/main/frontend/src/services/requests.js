@@ -4,6 +4,7 @@ import authHeader from './auth-header';
 const PUBLIC_API_URL = "http://localhost:8080/api/public/";
 const USERS_API_URL = "http://localhost:8080/api/users/";
 const ANIMALS_API_URL = "http://localhost:8080/api/animals/";
+const HOSTELS_API_URL = "http://localhost:8080/api/hostels/";
 
 class RequestService {
     //|============|
@@ -37,6 +38,19 @@ class RequestService {
 
     getCountAllAnimals() {
         return axios.get(ANIMALS_API_URL + 'count', {
+            headers: authHeader()
+        });
+    }
+
+    //Hostels
+    getAllHostels() {
+        return axios.get(HOSTELS_API_URL + 'all', {
+            headers: authHeader()
+        });
+    }
+
+    getCountAllHostels() {
+        return axios.get(HOSTELS_API_URL + 'count', {
             headers: authHeader()
         });
     }

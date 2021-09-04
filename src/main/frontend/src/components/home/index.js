@@ -7,14 +7,13 @@ export class Home extends Component {
     userList: []
   }
 
-  componentDidMount() { 
+  async componentDidMount () { 
     this.loadAllUsers();
   }
 
-  loadAllUsers = () => {
-    RequestService.getAllUsers().then(responce => {
+  async loadAllUsers () {
+    await RequestService.getAllUsers().then(responce => {
       if (responce != null) {
-        console.log(responce);
         this.setState({ users: responce.data });
       }
     });

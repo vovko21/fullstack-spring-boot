@@ -24,7 +24,7 @@ public class User {
 
     private String fullName;
 
-    @ManyToMany(cascade=CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="tblUserRoles",
             joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
@@ -37,7 +37,6 @@ public class User {
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime modifiedAt;
-
 
     public User() {
         roles = new ArrayList<Role>();
@@ -55,5 +54,9 @@ public class User {
         this.password = password;
         this.enabled = true;
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }

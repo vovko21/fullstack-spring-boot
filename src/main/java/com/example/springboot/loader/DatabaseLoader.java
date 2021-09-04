@@ -2,9 +2,11 @@ package com.example.springboot.loader;
 
 import com.example.springboot.constants.Roles;
 import com.example.springboot.entities.Animal;
+import com.example.springboot.entities.Hostel;
 import com.example.springboot.entities.Role;
 import com.example.springboot.entities.User;
 import com.example.springboot.repositories.AnimalRepository;
+import com.example.springboot.repositories.HostelRepository;
 import com.example.springboot.repositories.RoleRepository;
 import com.example.springboot.repositories.UserRepository;
 import javafx.beans.binding.ListBinding;
@@ -18,22 +20,28 @@ import java.util.List;
 
 @Component
 public class DatabaseLoader implements CommandLineRunner {
-    private final AnimalRepository animalRepository;
-    private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private AnimalRepository animalRepository;
 
     @Autowired
-    public DatabaseLoader(AnimalRepository animalRepository, RoleRepository roleRepository,
-                          UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.animalRepository = animalRepository;
-        this.roleRepository=roleRepository;
-        this.userRepository=userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private HostelRepository hostelRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
+        if(this.hostelRepository.count() == 0)
+        {
+            this.hostelRepository.save(new Hostel("Capsule Hostel", "Вул. Соборна 14"));
+            this.hostelRepository.save(new Hostel("Animals Hostel", "Вул. Київська 21"));
+        }
         if(this.animalRepository.count() == 0)
         {
             this.animalRepository.save(new Animal("Собака Джима"));
@@ -47,15 +55,13 @@ public class DatabaseLoader implements CommandLineRunner {
         }
         if(this.userRepository.count() == 0)
         {
-            List<Role> rolesAdmin = new ArrayList<>();
-            rolesAdmin.add(this.roleRepository.findByName(Roles.Admin));
-            this.userRepository.save(new User("semen@gmail.com",
-                    passwordEncoder.encode("123456"), rolesAdmin));
+            User semen_user = new User("semen@gmail.com", passwordEncoder.encode("123456"));
+            semen_user.addRole(new Role(Roles.Admin));
+            this.userRepository.save(semen_user);
 
-            List<Role> rolesUser = new ArrayList<>();
-            rolesUser.add(this.roleRepository.findByName(Roles.User));
-            this.userRepository.save(new User("user@gmail.com",
-                    passwordEncoder.encode("123456"), rolesUser));
+            User user = new User("user@gmail.com", passwordEncoder.encode("123456"));
+            user.addRole(new Role(Roles.User));
+            this.userRepository.save(user);
         }
     }
 }

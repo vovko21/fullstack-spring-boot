@@ -69,7 +69,7 @@ const Admin = (props) => {
           <Redirect from="*" to="/admin/index" />
         </Switch>
         <Container fluid>
-          {/* <AdminFooter /> */}
+          <AdminFooter />
         </Container>
       </div>
     </>

@@ -14,10 +14,11 @@ public class Role  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy="roles")
+    @OneToMany
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private List<User> users;
 
     public Role() {
@@ -26,6 +27,6 @@ public class Role  {
 
     public Role(String name) {
         this.name = name;
-        users=new ArrayList<User>();
+        users = new ArrayList<User>();
     }
 }

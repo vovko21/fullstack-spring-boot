@@ -1,5 +1,6 @@
 package com.example.springboot.service;
 
+import com.example.springboot.entities.Role;
 import com.example.springboot.entities.User;
 import com.example.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class UserService implements UserDetailsService {
                 .security.core.userdetails.User(user.getUsername(),
                     user.getPassword(), getAuthorities(user));
     }
+
     private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
         String [] userRoles = user.getRoles().stream()
                 .map((role) -> role.getName()).toArray(String []:: new);
