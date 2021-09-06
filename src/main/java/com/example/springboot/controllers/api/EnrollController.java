@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -23,16 +24,20 @@ public class EnrollController {
     private final AnimalRepository animalRepository;
 
     @PostMapping("/enroll")
-    public ResponseEntity<Hostel> enrollHostel(@RequestBody EnrollRequest request) {
+    public HttpStatus enrollHostel(@RequestBody @Valid EnrollRequest request) {
         try {
-            Animal newAnimal = animalRepository.save(new Animal(request.getAnimalName()));
+            if(request.getAnimalName() == "" || request.getHostelId() == -1) return HttpStatus.BAD_REQUEST;
             Optional<Hostel> selectedHostel = hostelRepository.findById(request.getHostelId());
             if(selectedHostel.isPresent()) {
-                selectedHostel.get().addAnimal(newAnimal);
+                Hostel hostel = selectedHostel.get();
+                Animal newAnimal = animalRepository.save(new Animal(request.getAnimalName()));
+                hostel.addAnimal(newAnimal);
+                hostelRepository.save(hostel);
+                return HttpStatus.CREATED;
             }
-            return new ResponseEntity<>(selectedHostel.get(), HttpStatus.CREATED);
+            return HttpStatus.BAD_REQUEST;
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
 }

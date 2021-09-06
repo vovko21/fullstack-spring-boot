@@ -55,9 +55,9 @@ class RequestService {
         });
     }
 
-    //|============|
+    //|=============|
     //|POST requests|
-    //|============|
+    //|=============|
     //Auth
     postLogin(parameters, chechIsLoginIn) {
         return axios.post(PUBLIC_API_URL +  'login', parameters).then(response => {
@@ -79,9 +79,7 @@ class RequestService {
 
     //Enroll
     postEnroll(parameters) {
-        return axios.post(PUBLIC_API_URL + 'enroll', parameters, {
-            headers: authHeader()
-        });
+        return axios.post(PUBLIC_API_URL + 'enroll', parameters);
     }
 }
 

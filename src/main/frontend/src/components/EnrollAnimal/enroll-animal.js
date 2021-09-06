@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { flushSync } from 'react-dom';
 import {
     Button,
     Container,
@@ -6,31 +7,30 @@ import {
     FormGroup,
     Input,
     Label,
-    FormText,
-    Row,
-    Col,
+    Alert,
 } from "reactstrap";
 import RequestService from '../../services/requests'
 
 export class EnrollAnimal extends Component {
     state = {
         hostelsList: null,
-        submit: {animalName: "", hostelId: -1}
+        submit: { animalName: "", hostelId: -1 },
+        alert: { color: "", message: "" },
     }
 
-    async componentDidMount () {
+    constructor(props) {
+        super(props);
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    async componentDidMount() {
         await this.loadHostelsList();
     }
 
-    async loadHostelsList () {
-        const allHostels = await this.getAllHostels().then(response => {return response.data});
-        // let hostelsList = [];
-        // for (let index = 0; index < allHostels.length; index++) {
-        //     const element = allHostels[index];
-        //     hostelsList[index] = element.name;
-        // }
+    async loadHostelsList() {
+        const allHostels = await this.getAllHostels().then(response => { return response.data });
 
-        this.setState({hostelsList: this.mapHostelsList(allHostels)});
+        this.setState({ hostelsList: this.mapHostelsList(allHostels) });
     }
 
     mapHostelsList(data) {
@@ -44,55 +44,87 @@ export class EnrollAnimal extends Component {
         });
     }
 
-    getAllHostels () {
+    getAllHostels() {
         return RequestService.getAllHostels();
     }
 
-    onSubmit (e) {
+    async onSubmit(e) {
         e.preventDefault();
-        RequestService.postEnroll(this.state.submit);
-    }
 
-    onChangeInputHandler = (e) => {
-        var target = e.target;
+        let target = e.target;
         this.setState({
-            [target.name]: target.value
-        });
+            submit: { animalName: target['exampleName'].value, hostelId: target['exampleSelect'].value }
+        }, function () { console.log(this.state); });
+
+        let status = await RequestService.postEnroll(this.state.submit).then((response) => { return response.data });
+
+        if (status == "CREATED") {
+            this.setState({ alert: { color: "success", message: "Your animal enrolle to the hostel" } });
+        } else {
+            this.setState({ alert: { color: "danger", message: "Fill all fields" } });
+        }
     }
 
     render() {
-        const {animalName, hostelId} = this.state.submit;
-        return (
-            <>
-                <Container className="mt-5">
-                    <Form onSubmit={this.onSubmit}>
-                        <FormGroup>
-                            <Label for="exampleEmail">Animal name</Label>
-                            <Input type="text" 
-                                name="animalName" 
-                                id="exampleEmail" 
-                                placeholder="How you called an animal" 
-                                value={animalName}
-                                onChange={this.onChangeInputHandler}/>
-                        </FormGroup>
-                        
-                        <FormGroup>
-                            <Label for="exampleSelect">Select Hostel</Label>
-                            <Input type="select" 
-                                name="hostelId" 
-                                id="exampleSelect"
-                                value={hostelId}
-                                onChange={this.onChangeInputHandler}>
-                                {this.state.hostelsList}
-                            </Input>
-                        </FormGroup>
-                        
-                        <Button>Submit</Button>
-                    </Form>
-                </Container>
-            </>
-        );
+        if (this.state.alert.color != "") {
+            return (
+                <>
+                    <Container className="mt-5">
+                        <Alert color={this.state.alert.color}>
+                            {this.state.alert.message}
+                        </Alert>
+                        <Form onSubmit={this.onSubmit}>
+                            <FormGroup>
+                                <Label for="exampleName">Animal name</Label>
+                                <Input type="text"
+                                    name="animalName"
+                                    id="exampleName"
+                                    placeholder="How you called an animal" />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label for="exampleSelect">Select Hostel</Label>
+                                <Input type="select"
+                                    name="hostelId"
+                                    id="exampleSelect">
+                                    {this.state.hostelsList}
+                                </Input>
+                            </FormGroup>
+
+                            <Button>Submit</Button>
+                        </Form>
+                    </Container>
+                </>
+            );
+        } else {
+            return (
+                <>
+                    <Container className="mt-5">
+                        <Form onSubmit={this.onSubmit}>
+                            <FormGroup>
+                                <Label for="exampleName">Animal name</Label>
+                                <Input type="text"
+                                    name="animalName"
+                                    id="exampleName"
+                                    placeholder="How you called an animal" />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label for="exampleSelect">Select Hostel</Label>
+                                <Input type="select"
+                                    name="hostelId"
+                                    id="exampleSelect">
+                                    {this.state.hostelsList}
+                                </Input>
+                            </FormGroup>
+
+                            <Button>Submit</Button>
+                        </Form>
+                    </Container>
+                </>
+            );
+        }
     }
 }
 
-export default EnrollAnimal
+export default EnrollAnimal;

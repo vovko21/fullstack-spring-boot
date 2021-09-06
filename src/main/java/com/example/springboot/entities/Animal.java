@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -14,6 +15,7 @@ public class Animal {
     private int id;
 
     @Column(length = 255, nullable = false)
+    @NotNull
     private String name;
 
     public Animal(String name) {
