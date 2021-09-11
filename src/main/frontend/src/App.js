@@ -12,7 +12,6 @@ import "../src/assets/scss/argon-dashboard-react.scss";
 
 import AdminLayout from './layouts/Admin';
 import UserLayout from './layouts/User';
-import EnrollAnimal from './components/EnrollAnimal/enroll-animal';
 
 import userRoutes from "../src/routes-user";
 
@@ -29,7 +28,6 @@ class App extends Component {
   }
 
   chechIsLoginIn() {
-    console.log(userRoutes(this.state.isLoginIn, this.state.userRoles, this.chechIsLoginIn).userroutes);
     let user = localStorage.getItem('user');
     if (user != null) {
       this.setState({ isLoginIn: true }, () => {
@@ -57,7 +55,8 @@ class App extends Component {
 
   logout () {
     localStorage.removeItem("user");
-    // this.chechIsLoginIn();
+    document.location.reload();
+    this.chechIsLoginIn();
   }
 
   render() {
