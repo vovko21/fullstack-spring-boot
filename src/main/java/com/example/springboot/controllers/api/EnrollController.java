@@ -8,12 +8,10 @@ import com.example.springboot.repositories.HostelRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,6 +36,20 @@ public class EnrollController {
             return HttpStatus.BAD_REQUEST;
         } catch (Exception e) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+    }
+
+    @GetMapping("/get-animals-{hostel_id}")
+    public List<Animal> getAnimalsByHostel(@PathVariable("hostel_id") int hostel_id) {
+        try {
+            Optional<Hostel> selectedHostel = hostelRepository.findById(hostel_id);
+            if(selectedHostel.isPresent()) {
+                Hostel hostel = selectedHostel.get();
+                return hostel.getAnimals();
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
         }
     }
 }

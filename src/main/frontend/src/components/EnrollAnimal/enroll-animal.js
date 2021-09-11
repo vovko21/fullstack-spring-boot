@@ -10,6 +10,7 @@ import {
     Alert,
 } from "reactstrap";
 import RequestService from '../../services/requests'
+import UserHeader from '../Headers/UserHeader';
 
 export class EnrollAnimal extends Component {
     state = {
@@ -69,6 +70,8 @@ export class EnrollAnimal extends Component {
         if (this.state.alert.color != "") {
             return (
                 <>
+                    <UserHeader logout={this.props.logout} />
+
                     <Container className="mt-5">
                         <Alert color={this.state.alert.color}>
                             {this.state.alert.message}
@@ -99,6 +102,8 @@ export class EnrollAnimal extends Component {
         } else {
             return (
                 <>
+                    <UserHeader logout={this.props.logout} />
+
                     <Container className="mt-5">
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>

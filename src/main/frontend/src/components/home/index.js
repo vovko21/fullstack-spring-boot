@@ -14,6 +14,8 @@ import {
   Col,
 } from "reactstrap";
 import RequestService from '../../services/requests'
+import Header from '../Headers/Header';
+import UserHeader from '../Headers/UserHeader';
 
 export class Home extends Component {
   state = {
@@ -22,6 +24,8 @@ export class Home extends Component {
   render() {
     return (
       <>
+        <UserHeader logout={this.props.logout}/>
+
         <Container className="mt-5">
           <Row>
             <Col className="d-flex justify-content-center">

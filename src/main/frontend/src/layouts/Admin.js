@@ -37,7 +37,7 @@ const Admin = (props) => {
 
   const getBrandText = (path) => {
     for (let i = 0; i < routes.length; i++) {
-      if (props.location.pathname.indexOf(routes[i].layout + routes[i].path) !==-1) {
+      if (props.location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
         return routes[i].name;
       }
     }
@@ -62,7 +62,7 @@ const Admin = (props) => {
         />
         <Switch>
           {getRoutes(routes)}
-          <Redirect from="*" to="/admin/index" />
+          <Redirect from="/admin" to="/admin/index" />
         </Switch>
         <Container fluid>
           <AdminFooter />

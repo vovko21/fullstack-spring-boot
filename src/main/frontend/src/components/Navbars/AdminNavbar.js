@@ -41,7 +41,7 @@ const AdminNavbar = (props) => {
             </FormGroup>
           </Form>
           <Nav className="align-items-center d-none d-md-flex" navbar>
-            <UncontrolledDropdown nav>
+            {/* <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
                   <span className="avatar avatar-sm rounded-circle">
@@ -86,7 +86,7 @@ const AdminNavbar = (props) => {
                   <span>Logout</span>
                 </DropdownItem>
               </DropdownMenu>
-            </UncontrolledDropdown>
+            </UncontrolledDropdown> */}
           </Nav>
         </Container>
       </Navbar>

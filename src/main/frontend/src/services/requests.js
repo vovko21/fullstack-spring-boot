@@ -42,6 +42,10 @@ class RequestService {
         });
     }
 
+    getAnimalsByHostel(hostel_id) {
+        return axios.get(PUBLIC_API_URL + 'get-animals-' + hostel_id);
+    }
+
     //Hostels
     getAllHostels() {
         return axios.get(HOSTELS_API_URL + 'all', {
@@ -59,20 +63,18 @@ class RequestService {
     //|POST requests|
     //|=============|
     //Auth
-    postLogin(parameters, chechIsLoginIn) {
+    postLogin(parameters) {
         return axios.post(PUBLIC_API_URL +  'login', parameters).then(response => {
             if(response.data.token) {
                 localStorage.setItem('user', JSON.stringify(response.data));
-                chechIsLoginIn();
             }
         });
     }
 
-    postRegister(parameters, chechIsLoginIn) {
+    postRegister(parameters) {
         return axios.post(PUBLIC_API_URL + 'register', parameters).then(response => {
             if(response.data.token) {
                 localStorage.setItem('user', JSON.stringify(response.data));
-                chechIsLoginIn();
             }
         });
     }

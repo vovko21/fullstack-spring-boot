@@ -5,41 +5,46 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-import Home from './components/home';
-import Login from './components/login';
-import Navbar from './components/Navbars/UserNavbar';
-import Register from './components/register';
 
 import "../src/assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../src/assets/scss/argon-dashboard-react.scss";
 
 import AdminLayout from './layouts/Admin';
-import { EnrollAnimal } from './components/EnrollAnimal/enroll-animal';
+import UserLayout from './layouts/User';
+import EnrollAnimal from './components/EnrollAnimal/enroll-animal';
+
+import userRoutes from "../src/routes-user";
 
 class App extends Component {
   state = {
     isLoginIn: null,
     userRoles: "",
+    user_routes: null,
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     let user = this.chechIsLoginIn();
     await this.chechUserRole(user);
   }
 
-  chechIsLoginIn = () => {
+  chechIsLoginIn() {
+    console.log(userRoutes(this.state.isLoginIn, this.state.userRoles, this.chechIsLoginIn).userroutes);
     let user = localStorage.getItem('user');
-    if (user != undefined) {
-      this.setState({isLoginIn: true});
+    if (user != null) {
+      this.setState({ isLoginIn: true }, () => {
+        this.setState({ user_routes: userRoutes(this.state.isLoginIn, this.state.userRoles, this.chechIsLoginIn).userroutes });
+      });
     } else {
-      this.setState({isLoginIn: false});
+      this.setState({ isLoginIn: false }, () => {
+        this.setState({ user_routes: userRoutes(this.state.isLoginIn, this.state.userRoles, this.chechIsLoginIn).userroutes });
+      });
     }
     return user;
   }
 
-  async chechUserRole (user) {
-    if(user == null) return;
+  async chechUserRole(user) {
+    if (user == null) return;
     let userObj = JSON.parse(user);
     let userRoleNames = [];
 
@@ -47,42 +52,33 @@ class App extends Component {
       userRoleNames[index] = userObj.roles[index].name;
     }
 
-    this.setState({userRoles: userRoleNames});
+    this.setState({ userRoles: userRoleNames });
+  }
+
+  logout () {
+    localStorage.removeItem("user");
+    // this.chechIsLoginIn();
   }
 
   render() {
-    if(this.state.userRoles.includes('admin')) {
+    if(this.state.user_routes == null){
+      return (<div>WAIT</div>)
+    }
+    if (this.state.userRoles.includes('admin')) {
       return (
         <Router>
           <Switch>
-            {/* Client Routes */}
-            <Route exact path="/">
-              <Navbar isAdmin={true} chechIsLoginIn={this.chechIsLoginIn} isLoginIn={this.state.isLoginIn} />
-              <div className="container">
-                <Home />
-              </div>
-            </Route>
-            {/* Auth Routes */}
-            <Route path="/login">
-              <Navbar isAdmin={true} chechIsLoginIn={this.chechIsLoginIn} isLoginIn={this.state.isLoginIn} />
-              <div className="container">
-                <Login chechIsLoginIn={this.chechIsLoginIn} />
-              </div>
-            </Route>
-            <Route path="/register">
-              <Navbar isAdmin={true} chechIsLoginIn={this.chechIsLoginIn} isLoginIn={this.state.isLoginIn} />
-              <div className="container">
-                <Register chechIsLoginIn={this.chechIsLoginIn}/>
-              </div>
-            </Route>
-            <Route path="/enroll">
-              <Navbar chechIsLoginIn={this.chechIsLoginIn} isLoginIn={this.state.isLoginIn} />
-              <div className="container">
-                <EnrollAnimal />
-              </div>
-            </Route>
             {/* Admin Layout */}
             <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+            {/* User Layout */}
+            <Route path="/" render={(props) => <UserLayout
+              isLoginIn={this.state.isLoginIn}
+              chechIsLoginIn={this.chechIsLoginIn}
+              userRoles={this.state.userRoles}
+              allUserRoutes={this.state.user_routes}
+              logout={this.logout}
+            />}
+            />
           </Switch>
         </Router>
       );
@@ -90,32 +86,14 @@ class App extends Component {
       return (
         <Router>
           <Switch>
-            {/* Client Routes */}
-            <Route exact path="/">
-              <Navbar chechIsLoginIn={this.chechIsLoginIn} isLoginIn={this.state.isLoginIn} />
-              <div className="container">
-                <Home />
-              </div>
-            </Route>
-            {/* Auth Routes */}
-            <Route path="/login">
-              <Navbar chechIsLoginIn={this.chechIsLoginIn} isLoginIn={this.state.isLoginIn} />
-              <div className="container">
-                <Login chechIsLoginIn={this.chechIsLoginIn} />
-              </div>
-            </Route>
-            <Route path="/register">
-              <Navbar chechIsLoginIn={this.chechIsLoginIn} isLoginIn={this.state.isLoginIn} />
-              <div className="container">
-                <Register chechIsLoginIn={this.chechIsLoginIn}/>
-              </div>
-            </Route>
-            <Route path="/enroll">
-              <Navbar chechIsLoginIn={this.chechIsLoginIn} isLoginIn={this.state.isLoginIn} />
-              <div className="container">
-                <EnrollAnimal />
-              </div>
-            </Route>
+            {/* User Layout */}
+            <Route path="/" render={(props) => <UserLayout
+              isLoginIn={this.state.isLoginIn}
+              chechIsLoginIn={this.chechIsLoginIn}
+              userRoles={this.state.userRoles}
+              allUserRoutes={this.state.user_routes}
+            />}
+            />
           </Switch>
         </Router>
       );
